@@ -1,0 +1,20 @@
+{
+  "name": "ecommerce-microservices-e2e",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "implicitDependencies": ["ecommerce-microservices"],
+  "targets": {
+    "e2e": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{e2eProjectRoot}"],
+      "options": {
+        "jestConfig": "apps/ecommerce-microservices-e2e/jest.config.cts",
+        "passWithNoTests": true
+      },
+      "dependsOn": [
+        "ecommerce-microservices:build",
+        "ecommerce-microservices:serve"
+      ]
+    }
+  }
+}
