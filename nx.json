@@ -39,7 +39,13 @@
       "options": {
         "targetName": "test"
       },
-      "exclude": ["apps/ecommerce-microservices-e2e/**/*"]
+      "exclude": [
+        "apps/ecommerce-microservices-e2e/**/*",
+        "api-gateway-e2e/**/*",
+        "auth-service-e2e/**/*",
+        "product-service-e2e/**/*",
+        "order-service-e2e/**/*"
+      ]
     }
   ]
 }
