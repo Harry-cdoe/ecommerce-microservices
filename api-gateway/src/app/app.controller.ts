@@ -1,6 +1,11 @@
 import { Body, Controller, Get, Inject, Post } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
+import {
+  ORDER_CREATED_EVENT,
+  OrderCreatedEvent,
+} from '@contracts/events/order-created.event';
+
 
 @Controller()
 export class AppController {
@@ -31,7 +36,7 @@ export class AppController {
   @Post('orders')
   async createOrder(@Body() body: any) {
     return await firstValueFrom(
-      this.orderClient.send('create_order', body),
+      this.orderClient.send('CREATE_ORDER', body),
     );
   }
 }

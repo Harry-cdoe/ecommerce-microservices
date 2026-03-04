@@ -9,7 +9,7 @@ import { AppController } from './app.controller';
         name: 'AUTH_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://localhost:5672'],
+            urls: ['amqp://guest:guest@localhost:5672'],
           queue: 'auth_queue',
           queueOptions: {
             durable: false,
@@ -20,7 +20,7 @@ import { AppController } from './app.controller';
         name: 'PRODUCT_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://localhost:5672'],
+            urls: ['amqp://guest:guest@localhost:5672'],
           queue: 'product_queue',
           queueOptions: { durable: false },
         },
@@ -29,7 +29,7 @@ import { AppController } from './app.controller';
         name: 'ORDER_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://localhost:5672'],
+            urls: ['amqp://guest:guest@localhost:5672'],
           queue: 'order_queue',
           queueOptions: { durable: false },
         },

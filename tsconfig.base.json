@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@contracts": ["libs/contracts/src"],
+      "@contracts/*": ["libs/contracts/src/*"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
