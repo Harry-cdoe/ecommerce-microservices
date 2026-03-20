@@ -1,10 +1,11 @@
-version: '3'
 services:
   rabbitmq:
     image: rabbitmq:3-management
+    container_name: rabbitmq
     ports:
       - '5672:5672'
       - '15672:15672'
+
   product-db:
     image: postgres:15
     container_name: product-db
@@ -12,10 +13,72 @@ services:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: root
       POSTGRES_DB: product
-    ports:
-      - '5433:5432'
     volumes:
       - product_data:/var/lib/postgresql/data
+
+  api-gateway:
+    build:
+      context: .
+      dockerfile: api-gateway/Dockerfile
+      target: builder
+    container_name: api-gateway
+    ports:
+      - '3000:3000'
+    volumes:
+      - .:/workspace
+      - /workspace/node_modules
+    environment:
+      - NX_DAEMON=false    
+    command:  >
+      sh -c "npx nx build api-gateway && node dist/api-gateway/main.js"
+    depends_on:
+      - rabbitmq
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+      target: builder
+    container_name: auth-service
+    volumes:
+      - .:/workspace
+      - /workspace/node_modules
+    environment:
+      - NX_DAEMON=false
+    command: npx nx serve auth-service --host=0.0.0.0
+    depends_on:
+      - rabbitmq
+
+  product-service:
+    build:
+      context: .
+      dockerfile: product-service/Dockerfile
+      target: builder
+    container_name: product-service
+    volumes:
+      - .:/workspace
+      - /workspace/node_modules
+    environment:
+      - NX_DAEMON=false
+    command: npx nx serve product-service --host=0.0.0.0
+    depends_on:
+      - rabbitmq
+      - product-db
+
+  order-service:
+    build:
+      context: .
+      dockerfile: order-service/Dockerfile
+      target: builder
+    container_name: order-service
+    volumes:
+      - .:/workspace
+      - /workspace/node_modules
+    environment:
+      - NX_DAEMON=false
+    command: npx nx serve order-service --host=0.0.0.0
+    depends_on:
+      - rabbitmq
 
 volumes:
   product_data:

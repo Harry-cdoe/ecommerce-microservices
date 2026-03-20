@@ -6,15 +6,23 @@
   "targets": {
     "build": {
       "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/dist/api-gateway"],
       "options": {
         "command": "webpack-cli build",
-        "args": ["--node-env=production"],
+        "args": ["--node-env=production", "--output-path=../dist/api-gateway"],
         "cwd": "api-gateway"
       },
       "configurations": {
         "development": {
-          "args": ["--node-env=development"]
+          "args": ["--node-env=development", "--output-path=../dist/api-gateway"]
         }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "options": {
+        "buildTarget": "api-gateway:build",
+        "watch": true
       }
     },
     "prune-lockfile": {
@@ -36,28 +44,6 @@
       "executor": "@nx/js:copy-workspace-modules",
       "options": {
         "buildTarget": "build"
-      }
-    },
-    "prune": {
-      "dependsOn": ["prune-lockfile", "copy-workspace-modules"],
-      "executor": "nx:noop"
-    },
-    "serve": {
-      "continuous": true,
-      "executor": "@nx/js:node",
-      "defaultConfiguration": "development",
-      "dependsOn": ["build"],
-      "options": {
-        "buildTarget": "api-gateway:build",
-        "runBuildTargetDependencies": false
-      },
-      "configurations": {
-        "development": {
-          "buildTarget": "api-gateway:build:development"
-        },
-        "production": {
-          "buildTarget": "api-gateway:build:production"
-        }
       }
     }
   },
